@@ -5,6 +5,11 @@ public class Sala {
     // Constructor
     public Sala(TipoSala sala) {
         this.mesas = new Mesa[sala.getFilas()][sala.getColumnas()];
+        for (int i = 0; i < mesas.length; i++) {
+            for (int j = 0; j < mesas[i].length; j++) {
+                mesas[i][j] = new Mesa();
+            }
+        }
     }
 
     // Metodos

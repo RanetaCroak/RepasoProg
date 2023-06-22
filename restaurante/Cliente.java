@@ -19,7 +19,14 @@ public class Cliente {
         return true;
     }
 
+    
+    @Override
+    public String toString() {
+        return "nombre: "+ nombre + ", DNI: "+ dni + ", telefono: "+ telefono + ", mesaAsignada="
+                + mesaAsignada + ", menu: "+ menu;
+    }
     // getSet
+
 
     public String getNombre() {
         return nombre;

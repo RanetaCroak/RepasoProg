@@ -7,12 +7,22 @@ public enum TipoMenu {
             return 15;
         }
 
+        @Override
+        public String toString() {
+            return "vegano";
+        }
+
     },
     NORMAL {
 
         @Override
         public int getPrecioEuros() {
             return 10;
+        }
+
+        @Override
+        public String toString() {
+            return "normal";
         }
 
     };

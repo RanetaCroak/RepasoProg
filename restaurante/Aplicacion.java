@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Aplicacion {
@@ -16,6 +17,7 @@ public class Aplicacion {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         System.out.println("Introduce el nombre del restaurante: ");
+        
         String nombreRestaurante = sc.nextLine();
         Restaurante restaurante = new Restaurante(nombreRestaurante);
 
@@ -23,7 +25,12 @@ public class Aplicacion {
         int opc = 0;
         do {
             menuPrincipal();
-
+            try {
+                opc = Integer.parseInt(sc.nextLine());
+            } catch (NumberFormatException e) {
+                System.out.println("Introduce un valor numérico\n");
+                opc = 0;
+            }
             switch (opc) {
                 case 1:
                     System.out.println("Nombre y apellidos del cliente:");
@@ -34,8 +41,8 @@ public class Aplicacion {
                     int telefono = sc.nextInt();
                     sc.nextLine();
 
-                    // TODO comparar DNI antes de crear el cliente
                     Cliente clienteNuevo = new Cliente(nombre, dni, telefono);
+                    restaurante.compararDni(clienteNuevo);
                     System.out.println("¿Es vegano? (s/n)");
                     if (sc.nextLine().equalsIgnoreCase("s")) {
                         clienteNuevo = (ClienteVegano) clienteNuevo;
@@ -43,7 +50,11 @@ public class Aplicacion {
                     break;
             
                 case 2:
-                    
+                    System.out.println("Selecciona un cliente para la reserva por DNI");
+                    restaurante.mostrarClientes();
+                    String dniReserva = sc.nextLine();
+
+                    restaurante.buscarCliente(dniReserva);
                     break;
             
                 case 3:
@@ -55,7 +66,8 @@ public class Aplicacion {
                     break;
             
                 case 5:
-                    
+                System.out.println("Saliendo...");
+                    salir = true;
                     break;
             
                 default:
