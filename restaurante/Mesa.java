@@ -18,12 +18,11 @@ public class Mesa {
 
     public double cuenta() {
         double totalCuenta = 0;
+        for (Cliente cliente : comensales) {
+            
+        }
 
         return totalCuenta;
-    }
-
-    public void name() {
-        
     }
 
     // GetSet

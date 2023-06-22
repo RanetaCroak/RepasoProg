@@ -3,12 +3,14 @@ public class Cliente {
     private String dni;
     private int telefono;
     private Mesa mesaAsignada;
+    TipoMenu menu;
 
     // Constructor
     public Cliente(String nombre, String dni, int telefono) {
         this.nombre = nombre;
         this.dni = dni;
         this.telefono = telefono;
+        this.menu = TipoMenu.NORMAL;
     }
 
     // Metodos
@@ -18,6 +20,7 @@ public class Cliente {
     }
 
     // getSet
+
     public String getNombre() {
         return nombre;
     }
