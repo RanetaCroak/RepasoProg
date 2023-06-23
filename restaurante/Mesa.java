@@ -1,3 +1,4 @@
+
 public class Mesa implements Reservable, ComparatorDniInterface {
     final private int maximoComensales = 4;
     private int numeroComensales;
@@ -14,6 +15,15 @@ public class Mesa implements Reservable, ComparatorDniInterface {
         this.comensales[this.getNumeroComensales()] = cliente;
         // Sumar 1 comensal a la mesa
         this.setNumeroComensales(numeroComensales + 1);
+        cliente.setMesaAsignada(this);
+    }
+
+    @Override
+    public String toString() {
+        if (this.numeroComensales == maximoComensales) {
+            System.out.print("LLENA | ");
+        }
+        return "Comensales: " + numeroComensales + "/"+ maximoComensales;
     }
 
     public double cuenta(Sala sala) {
@@ -26,7 +36,7 @@ public class Mesa implements Reservable, ComparatorDniInterface {
     }
 
     @Override
-    public void realizarReserva(Cliente cliente, Mesa mesa) throws ReservaException {
+    public void realizarReserva(Cliente cliente) throws ReservaException {
         try {
             if (this.getNumeroComensales() >= this.getMaximoComensales()) {
                 throw new ReservaException("Esta mesa está llena.");
@@ -40,11 +50,12 @@ public class Mesa implements Reservable, ComparatorDniInterface {
     }
 
     @Override
-    public void cancelarReserva(Cliente cliente, Mesa mesa) throws ReservaException {
+    public void cancelarReserva(Cliente cliente) throws ReservaException {
         try {
             for (int i = 0; i < comensales.length; i++) {
                 if (comensales[i].equals(cliente)) {
                     comensales[i] = null;
+                    cliente.setMesaAsignada(null);
                     System.out.println("Reserva cancelada correctamente.");
                 }
             }
