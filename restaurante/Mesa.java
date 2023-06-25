@@ -3,19 +3,28 @@ public class Mesa implements Reservable, ComparatorDniInterface {
     final private int maximoComensales = 4;
     private int numeroComensales;
     private Cliente[] comensales;
+    private int fila;
+
+    private char columna;
 
     // Constructor
-    public Mesa() {
+    public Mesa(int fila, char columna) {
         this.numeroComensales = 0;
         this.comensales = new Cliente[maximoComensales];
+        this.fila = fila;
+        this.columna = columna;
     }
 
     // Metodos
-    public void anyadirComensal(Cliente cliente) {
+    public void anyadirComensal(Cliente cliente) throws ReservaException {
+        if (this.numeroComensales == maximoComensales) {
+            throw new ReservaException("La mesa está llena");
+        }
         this.comensales[this.getNumeroComensales()] = cliente;
         // Sumar 1 comensal a la mesa
         this.setNumeroComensales(numeroComensales + 1);
         cliente.setMesaAsignada(this);
+        System.out.println("Mesa asignada correctamente -> " + cliente.getMesaAsignada());
     }
 
     @Override
@@ -23,13 +32,25 @@ public class Mesa implements Reservable, ComparatorDniInterface {
         if (this.numeroComensales == maximoComensales) {
             System.out.print("LLENA | ");
         }
-        return "Comensales: " + numeroComensales + "/"+ maximoComensales;
+        return "Comensales: " + numeroComensales + "/" + maximoComensales;
     }
 
     public double cuenta(Sala sala) {
         double totalCuenta = sala.precioSala();
-        for (Cliente cliente : comensales) {
-            totalCuenta += cliente.menu.getPrecioEuros();
+        Cliente cliente;
+
+        for (int i = 0; i < comensales.length; i++) {
+            cliente = comensales[i];
+            if (cliente != null) {
+                totalCuenta += cliente.menu.getPrecioEuros();
+
+                try {
+                    this.cancelarReserva(cliente);
+                } catch (ReservaException e) {
+                    e.printStackTrace();
+                    System.out.println(e.getMessage());
+                }
+            }
         }
 
         return totalCuenta;
@@ -86,4 +107,19 @@ public class Mesa implements Reservable, ComparatorDniInterface {
         this.comensales = comensales;
     }
 
+    public int getFila() {
+        return fila;
+    }
+
+    public void setFila(int fila) {
+        this.fila = fila;
+    }
+
+    public char getColumna() {
+        return columna;
+    }
+
+    public void setColumna(char columna) {
+        this.columna = columna;
+    }
 }

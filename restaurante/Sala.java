@@ -4,10 +4,11 @@ public class Sala {
 
     // Constructor
     public Sala(TipoSala sala) {
+        this.sala = sala;
         this.mesas = new Mesa[sala.getFilas()][sala.getColumnas()];
         for (int i = 0; i < mesas.length; i++) {
             for (int j = 0; j < mesas[i].length; j++) {
-                mesas[i][j] = new Mesa();
+                mesas[i][j] = new Mesa(i, (char) (j + 'A'));
             }
         }
     }
@@ -18,9 +19,16 @@ public class Sala {
     }
 
     public void mostrarMesas() {
+        String posicionMesa;
         for (int i = 0; i < mesas.length; i++) {
+            System.out.println("\nFila " + i);
             for (int j = 0; j < mesas[i].length; j++) {
-                System.out.println("Fila " + i + " | Columna " + ((char) j) + 'A' + "\n" + mesas[i][j]);
+                posicionMesa = "Columna " + (char) (j + 'A') + " " + mesas[i][j];
+
+                System.out.print(posicionMesa + " || ");
+                if ((j+1) % 3 == 0) {
+                    System.out.println();
+                }
             }
         }
     }

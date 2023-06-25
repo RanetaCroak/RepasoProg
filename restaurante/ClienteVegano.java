@@ -6,9 +6,9 @@ public class ClienteVegano extends Cliente{
         this.menu = TipoMenu.VEGANO;
     }
 
-
     @Override
     public boolean puedeElegirMesa() {
        return false;
     }
+
 }

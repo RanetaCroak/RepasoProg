@@ -2,7 +2,9 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Restaurante implements ComparatorDniInterface {
     private String nombre;
@@ -20,30 +22,50 @@ public class Restaurante implements ComparatorDniInterface {
     }
 
     // Metodos
+
+    public void anyadirCliente(Cliente cliente) {
+        try {
+
+            this.clientes.add(cliente);
+            System.out.println("Cliente añadido correctamente.");
+        } catch (Exception e) {
+            System.out.println("Error al añadir al cliente\n" + e.getMessage());
+        }
+    }
+
     private boolean comprobarClienteVegano(ClienteVegano cliente) throws Exception {
-        try (BufferedReader reader = new BufferedReader(new FileReader("clientesVeganos.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("./restaurante/clientesVeganos.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] partes = line.split(":");
                 String dni = partes[1];
                 if (cliente.getDni().equals(dni)) {
-                    throw new Exception();
+                    throw new Exception("El cliente con DNI " + dni + " ya está en el archivo.");
                 }
             }
+            // Si no se encuentra ninguna coincidencia, se llega a este punto y se retorna
+            // false
+            return false;
         } catch (Exception e) {
+            // Si se lanza una excepción, significa que se encontró una coincidencia y se
+            // retorna true
             return true;
         }
-        return false;
     }
 
-    public void inscribirClienteVegano(ClienteVegano cliente){
+    public void inscribirClienteVegano(ClienteVegano cliente) {
+
         try {
             if (!comprobarClienteVegano(cliente)) {
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter("clientesVeganos.txt"))) {
-                    writer.write(cliente.getNombre()+":"+cliente.getDni()+":"+cliente.getTelefono());
-                    System.out.println("Cliente inscrito correctamente.");
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
+                try {
+                    BufferedWriter writer = new BufferedWriter(
+                            new FileWriter("./restaurante/clientesVeganos.txt", true));
+                    writer.write(cliente.getNombre() + ":" + cliente.getDni() + ":" + cliente.getTelefono());
+                    writer.newLine();
+                    writer.close();
+                    System.out.println("Se ha escrito en el archivo de clientes veganos correctamente.");
+                } catch (IOException e) {
+                    System.err.println("Error al escribir en el archivo: " + e.getMessage());
                 }
             }
         } catch (Exception e) {
@@ -74,6 +96,11 @@ public class Restaurante implements ComparatorDniInterface {
         for (Cliente cliente : clientes) {
             System.out.println(cliente);
         }
+    }
+
+    public void ordenarClientes() {
+        Collections.sort(this.getClientes());
+        mostrarClientes();
     }
 
     // Getters y setters
